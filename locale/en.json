@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Theme studio",
+    "description": "Choose presets or create HEX themes in Settings → General → Custom themes, beside Appearance. Palettes stay in this browser's local storage; no external service or model calls. Disable the plugin to remove its theme layer; saved palettes remain."
+  }
+}

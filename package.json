@@ -1,0 +1,79 @@
+{
+  "name": "dsh-theme-studio",
+  "version": "0.4.0",
+  "description": "Custom HEX palettes and a theme editor for DeepSeek Harness Appearance settings.",
+  "private": true,
+  "type": "module",
+  "license": "MIT",
+  "repository": { "type": "git", "url": "https://github.com/EdgarSantiago/dsh-theme-studio.git" },
+  "homepage": "https://github.com/EdgarSantiago/dsh-theme-studio#readme",
+  "bugs": { "url": "https://github.com/EdgarSantiago/dsh-theme-studio/issues" },
+  "keywords": ["dsh-plugin", "deepseek-harness", "theme", "appearance", "ui", "hex-colors"],
+  "main": "./dist/host.js",
+  "exports": {
+    ".": "./dist/host.js",
+    "./client": "./dist/client.js",
+    "./package.json": "./package.json",
+    "./cordis.patch.yml": "./cordis.patch.yml",
+    "./locale/*.json": "./locale/*.json",
+    "./icon": "./icon.svg"
+  },
+  "files": [
+    "dist",
+    "locale",
+    "cordis.patch.yml",
+    "icon.svg",
+    "README.md",
+    "LICENSE",
+    "THIRD_PARTY.md",
+    "licenses"
+  ],
+  "dsh": {
+    "manifestVersion": 1,
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    },
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-client-ui-theme",
+        "@deepseek-ai/dsh-client-ui-renderer",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "engines": {
+    "node": ">=24.11.0",
+    "dsh": "0.2.2-rc.1 || 0.2.2-rc.2"
+  },
+  "scripts": {
+    "build": "npm run typecheck && tsdown --config-loader native",
+    "typecheck": "tsc -p tsconfig.host.json && tsc -p tsconfig.client.json && tsc -p tsconfig.tests.json && tsc -p tsconfig.tooling.json",
+    "pretest": "npm run build",
+    "test": "node --test tests/*.test.ts"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "~4.1.0",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/cordis": "4.1.0",
+    "@deepseek-ai/dsh-client-locale": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-store": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-ui-layout": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-ui-primitives": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-ui-renderer": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-ui-settings": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-ui-slots": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-client-ui-theme": "0.2.2-rc.1",
+    "@deepseek-ai/dsh-tools": "0.2.2-rc.1",
+    "@types/node": "24.10.1",
+    "@types/react": "18.3.31",
+    "immer": "10.1.1",
+    "zustand": "4.5.7",
+    "lightningcss": "1.32.0",
+    "react": "18.3.1",
+    "tsdown": "0.23.7",
+    "typescript": "5.9.3"
+  }
+}

@@ -1,0 +1,1 @@
+{"version":3,"file":"host.js","names":[],"sources":["../src/index.ts"],"sourcesContent":["/** Host loader entry: browser capabilities live in the exported Client bundle. */\nexport const name = 'theme-studio'\nexport function apply(): void {}\n"],"mappings":";;AACA,MAAa,OAAO;AACpB,SAAgB,QAAc,CAAC"}

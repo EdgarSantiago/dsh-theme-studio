@@ -1,0 +1,12 @@
+node_modules/
+*.tgz
+.npm-cache/
+coverage/
+test-results/
+playwright-report/
+*.log
+.env
+.env.*
+!.env.example
+.DS_Store
+# Prebuilt dist artifacts are intentionally versioned for GitHub source installs.

@@ -1,0 +1,5 @@
+{
+  "extends": "./tsconfig.client.json",
+  "compilerOptions": { "types": ["node", "react"] },
+  "include": ["src/theme/**/*.ts", "src/theme/**/*.tsx", "tests/palette.test.ts", "tests/controller.test.ts", "tests/client-contract.test.ts"]
+}
