@@ -26,7 +26,8 @@
     "README.md",
     "LICENSE",
     "THIRD_PARTY.md",
-    "licenses"
+    "licenses",
+    "docs/images/*.png"
   ],
   "dsh": {
     "manifestVersion": 1,

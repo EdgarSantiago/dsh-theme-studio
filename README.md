@@ -37,7 +37,29 @@ To disable/remove it, use Plugin Manager. Removing the plugin does not erase sav
 
 Presets are limited adaptations of Dracula, Nord, Tokyo Night, Catppuccin Mocha, Rosé Pine Dawn and Solarized Light, not complete upstream themes. Original licenses and attributions are retained in [third-party notices](<THIRD_PARTY.md>) and [licenses](<licenses/>).
 
-The UI supports English, Portuguese and Simplified Chinese through Harness's locale service, with fallback for other languages.
+The UI and plugin metadata support all eight native Harness languages: English (`en`), Brazilian Portuguese (`pt`, with a `pt-BR` resource alias), Simplified Chinese (`zh`), Japanese (`ja`), Spanish (`es`), French (`fr`), German (`de`) and Russian (`ru`). Both the settings row and an open editor follow Harness language changes immediately through the native slot-injected translation function. There is no plugin language selector or language-preference write. User palette names and colors are not translated or changed.
+
+## Screenshots
+
+These are real screenshots supplied by the user, showing the English interface. The first has a red outline added around the button that opens the editor; the remaining screenshots are unchanged apart from removing image metadata.
+
+### 1. Open the theme editor
+
+Go to **Settings → General → Custom themes** and click **Create / edit theme**, highlighted in red.
+
+![Harness settings with the Create / edit theme button outlined in red](<docs/images/theme-studio-open-editor.png>)
+
+### 2. General settings
+
+Choose the active palette, edit its name and select the light or dark base. Save with **Save and apply**.
+
+![Theme Studio General tab showing the active palette, theme name and base](<docs/images/theme-studio-general.png>)
+
+### 3. Colors
+
+Adjust the six palette colors using the color picker or a HEX value, then save and apply the theme.
+
+![Theme Studio Colors tab with the six color pickers and HEX fields](<docs/images/theme-studio-colors.png>)
 
 ## Permissions, data and limitations
 
@@ -53,21 +75,23 @@ The UI supports English, Portuguese and Simplified Chinese through Harness's loc
 
 The manifest admits only the two verified prereleases, `0.2.2-rc.1 || 0.2.2-rc.2`. Development SDK packages remain pinned to rc.1 for regression coverage. The plugin was checked on macOS; Windows/Linux and future Harness versions are not visually certified.
 
-The rc.2 compatibility pass inspected live Client registrations for `theme-studio` in `settings.general.item`, along with the installed API surface. Unit/contract tests exercise real palette/controller logic and compiled bundles with test doubles; they do not certify every browser interaction. No new screenshot, mock preview or live GUI interaction is claimed by this publication preparation. Real automated output is recorded below after the release checks; the optional detail image is omitted rather than fabricated.
+The rc.2 compatibility pass inspected live Client registrations for `theme-studio` in `settings.general.item`, along with the installed API surface. Unit/contract tests exercise real palette/controller logic and compiled bundles with test doubles; they do not certify every browser interaction. The user-provided screenshots above illustrate the English interface; they are not automated browser captures or certification of the latest local translations. No mock preview or new live GUI test is claimed by this preparation. Real automated output is recorded below after the release checks; the optional detail image is omitted rather than fabricated.
 
 ### Actual automated output (2026-11-12)
 
-The publication preparation ran the commands below on the existing checkout, without installing the plugin or launching a browser:
+The local localization and README screenshot checks ran the commands below on the existing checkout, without installing the plugin, changing a profile or launching a browser:
 
 ```text
 npm test: build + four TypeScript programs passed
-Node tests: 40 tests, 40 passed, 0 failed
-npm pack --dry-run --ignore-scripts --json: 19 runtime/resource files
-Clean runtime copy: Host apply + Client syntax/ModuleLoader factory passed
-Rebuilt dist artifacts: only the CSS virtual-module comment changed to a package-relative path
+Node tests: 46 tests, 46 passed, 0 failed
+npm pack --dry-run --ignore-scripts --json: 28 runtime/resource files, including three README screenshots
+npm pack --ignore-scripts --json --pack-destination node_modules/.cache: local archive only
+Compiled Client: all locale dictionaries + both native locale seats registered and disposed
+Native SDK LocaleRuntime: stable t switches across eight languages; pt-BR browser tag resolves to pt
+Rebuilt all dist artifacts; inline CSS virtual-module path remains package-relative
 ```
 
-The clean-copy check had no package-local `node_modules` and did not run a development build. It checks resource completeness and basic loadability, not the remote GitHub installation or visual behavior. SVG icon structure is valid; rendered icon/details appearance remains unverified.
+The earlier publication clean-copy check had no package-local `node_modules` and verified basic loadability. The localization pass adds complete 61-key coverage, placeholder parity, non-English-content checks, metadata/pack coverage and the real SDK locale-runtime switching contract. It uses no new React/DOM renderer. Browser control was unavailable: no live visual interaction, open-modal switch or screen-reader behavior was exercised. Source and compiled registration checks do not certify rendered layout or remote GitHub installation. The inline CSS module stays package-relative; all distributed code/maps are checked for developer paths.
 
 ## Develop and validate
 

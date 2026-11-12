@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Editor de temas",
+    "description": "Elige temas predefinidos o crea temas HEX en Ajustes → General → Temas personalizados, junto a Apariencia. Las paletas se guardan en el almacenamiento local de este navegador, sin servicios externos ni llamadas a modelos. Desactiva el plugin para quitar su capa de tema; las paletas guardadas se conservan."
+  }
+}

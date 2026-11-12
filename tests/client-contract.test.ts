@@ -7,6 +7,7 @@ import * as jsx from 'react/jsx-runtime'
 import * as store from '@deepseek-ai/dsh-client-store'
 import { initialColors, STORAGE_KEY } from '../src/theme/palette.ts'
 import type { ThemeStudioController } from '../src/theme/controller.ts'
+import { dictionaries } from '../src/theme/locales.ts'
 
 type ClientExports = { inject: string[]; apply(ctx: unknown): void }
 type Registration = { id: string; factory(require: (id: string) => unknown): ClientExports }
@@ -16,6 +17,7 @@ async function harness(failOverlay = false) {
   const listeners = new Set<unknown>()
   const entries = new Set<Record<string, unknown>>()
   const effects: (() => void)[] = []
+  const locales = new Map<string, unknown>()
   let layer = false
   const data = new Map([[STORAGE_KEY, JSON.stringify({ version: 1, selected: 'preset-nord', palettes: [] })]])
   const window = {
@@ -40,7 +42,7 @@ async function harness(failOverlay = false) {
     effect: (fn: () => () => void) => { effects.push(fn()) },
     theme: { getTheme: () => ({ preference, active: { colorScheme: preference === 'dark' ? 'dark' : 'light' } }),
       setTheme: (id: string) => { preference = id }, overrideTokens: () => { layer = true; return () => { layer = false } } },
-    locale: { register: () => () => {} },
+    locale: { register: (namespace: string, dicts: unknown) => { locales.set(namespace, dicts); return () => { locales.delete(namespace) } } },
     on: (_event: string, listener: unknown) => { listeners.add(listener); return () => { listeners.delete(listener) } },
     slots: {
       inject: (key: string, callback: () => () => void) => {
@@ -50,8 +52,17 @@ async function harness(failOverlay = false) {
       register: (options: Record<string, unknown>) => { entries.add(options); return () => { entries.delete(options) } },
     },
   }
-  return { client, ctx, styles, listeners, entries, effects, data, hasLayer: () => layer }
+  return { client, ctx, styles, listeners, entries, effects, data, locales, hasLayer: () => layer }
 }
+
+test('compiled client registers full dictionaries and both native locale seats, then disposes them', async () => {
+  const h = await harness()
+  h.client.apply(h.ctx)
+  assert.deepEqual(JSON.parse(JSON.stringify(h.locales.get('theme-studio'))), dictionaries)
+  assert.deepEqual([...h.entries].map(entry => entry.locale), ['theme-studio', 'theme-studio'])
+  h.effects.pop()!()
+  assert.equal(h.locales.size, 0)
+})
 
 test('Client bundle uses baseline shared externals and additive public slots', async () => {
   const h = await harness()

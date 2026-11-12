@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Designeditor",
+    "description": "Wähle Vorlagen oder erstelle HEX-Designs unter Einstellungen → Allgemein → Eigene Designs neben Darstellung. Paletten bleiben im lokalen Speicher dieses Browsers, ohne externe Dienste oder Modellaufrufe. Deaktiviere das Plugin, um seine Designebene zu entfernen; gespeicherte Paletten bleiben erhalten."
+  }
+}

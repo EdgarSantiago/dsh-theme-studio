@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Éditeur de thèmes",
+    "description": "Choisissez des préréglages ou créez des thèmes HEX dans Paramètres → Général → Thèmes personnalisés, à côté d’Apparence. Les palettes restent dans le stockage local de ce navigateur, sans service externe ni appel à un modèle. Désactivez le plugin pour retirer sa couche de thème ; les palettes enregistrées sont conservées."
+  }
+}

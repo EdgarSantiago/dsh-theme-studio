@@ -9,7 +9,7 @@ import { STORAGE_KEY, type DecodedLibrary } from './palette.ts'
 import { ThemeLibraryStorage, ThemeStudioController } from './controller.ts'
 import { createStudioStore, draftFor } from './store.ts'
 import { ThemeSettingsRow, ThemeEditor } from './components.tsx'
-import { en, pt, zh } from './locales.ts'
+import { dictionaries } from './locales.ts'
 import { sidebarOverrideCss } from './sidebar.ts'
 
 export const inject = ['theme', 'slots', 'locale']
@@ -48,7 +48,7 @@ export function apply(ctx: Context) {
       style.textContent = css
       document.head.append(style)
       disposers.push(() => style.remove())
-      disposers.push(ctx.locale.register('theme-studio', { en, pt, zh }))
+      disposers.push(ctx.locale.register('theme-studio', dictionaries))
       disposers.push(ctx.on('theme/change', controller.themeChanged))
       const onStorage = (event: StorageEvent) => { if (event.key === STORAGE_KEY || event.key === null) controller.storageChanged() }
       window.addEventListener('storage', onStorage)

@@ -32,10 +32,14 @@ test('public source distribution keeps identity, metadata, licenses and prebuilt
   const client = await readFile(new URL(manifest.exports['./client'], root), 'utf8')
   assert.doesNotMatch(client, /(?:\/Users\/|\/home\/|[A-Z]:\\\\Users\\\\)/)
   assert.match(client, /harness-plugin-css:src\/theme\/style\.css\.mjs/)
+  for (const artifact of ['client.js', 'client.js.map', 'host.js', 'host.js.map']) {
+    const content = await readFile(new URL(`dist/${artifact}`, root), 'utf8')
+    assert.doesNotMatch(content, /(?:\/Users\/|\/home\/|[A-Z]:\\\\Users\\\\)/, artifact)
+  }
   assert.equal(manifest.exports['./icon'], './icon.svg')
   assert.ok(!(await readFile(new URL('.gitignore', root), 'utf8')).split(/\r?\n/).includes('dist/'))
   for (const file of ['icon.svg', 'LICENSE', 'THIRD_PARTY.md']) assert.ok(manifest.files.includes(file))
-  for (const tag of ['en', 'pt', 'zh']) {
+  for (const tag of ['en', 'pt', 'pt-BR', 'zh', 'ja', 'es', 'fr', 'de', 'ru']) {
     const locale = JSON.parse(await readFile(new URL(`locale/${tag}.json`, root), 'utf8'))
     assert.ok(locale.meta.title && locale.meta.description)
   }
@@ -44,6 +48,21 @@ test('public source distribution keeps identity, metadata, licenses and prebuilt
 test('bundle patch inserts this package with the documented Cordis id', async () => {
   const patch = await readFile(new URL(manifest.dsh.bundle.patch, root), 'utf8')
   assert.equal(patch, '- insert:\n    - id: theme-studio\n      name: dsh-theme-studio\n')
+})
+
+const screenshotNames = ['theme-studio-open-editor.png', 'theme-studio-general.png', 'theme-studio-colors.png']
+
+test('README screenshots are local PNG resources with readable alternative text', async () => {
+  assert.ok(manifest.files.includes('docs/images/*.png'))
+  const readme = await readFile(new URL('README.md', root), 'utf8')
+  assert.match(readme, /Create \/ edit theme.*highlighted in red/)
+  for (const name of screenshotNames) {
+    const path = `docs/images/${name}`
+    assert.ok(readme.includes(`](<${path}>)`), path)
+    const bytes = await readFile(new URL(path, root))
+    assert.deepEqual([...bytes.subarray(0, 8)], [137, 80, 78, 71, 13, 10, 26, 10], name)
+    assert.ok(bytes.readUInt32BE(16) > 0 && bytes.readUInt32BE(20) > 0, name)
+  }
 })
 
 test('npm package ships its declared patch and prebuilt standalone entry points', () => {
@@ -59,5 +78,7 @@ test('npm package ships its declared patch and prebuilt standalone entry points'
   }
   for (const path of ['package.json', 'icon.svg', 'LICENSE', 'THIRD_PARTY.md', 'licenses/dracula-MIT.txt', 'licenses/nord-MIT.txt', 'licenses/tokyo-night-MIT.txt', 'licenses/catppuccin-MIT.txt', 'licenses/rose-pine-MIT.txt', 'licenses/solarized-MIT.txt']) assert.ok(files.has(path), path)
   assert.ok(![...files].some(path => /node_modules|test-results|\.tgz$|\.log$/.test(path)))
-  assert.ok([...files].some(path => path.startsWith('locale/') && path.endsWith('.json')))
+  for (const tag of ['en', 'pt', 'pt-BR', 'zh', 'ja', 'es', 'fr', 'de', 'ru']) assert.ok(files.has(`locale/${tag}.json`), tag)
+  for (const file of ['client.js', 'client.js.map', 'host.js', 'host.js.map']) assert.ok(files.has(`dist/${file}`), file)
+  for (const name of screenshotNames) assert.ok(files.has(`docs/images/${name}`), name)
 })

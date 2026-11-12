@@ -1,0 +1,6 @@
+{
+  "meta": {
+    "title": "Editor de temas",
+    "description": "Escolha paletas prontas ou crie temas HEX em Configurações → Geral → Temas personalizados, junto à Aparência. As paletas ficam no armazenamento local deste navegador, sem serviços externos ou chamadas ao modelo. Desativar remove a camada visual, mas preserva as paletas salvas."
+  }
+}
