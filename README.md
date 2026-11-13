@@ -8,7 +8,7 @@ Independent community plugin; not affiliated with DeepSeek AI.
 
 ## Install from GitHub
 
-Requires **DeepSeek Harness `0.2.2-rc.1` or `0.2.2-rc.2`**, a managed **Web or Desktop** profile and **Node.js 24.11+**.
+Requires **DeepSeek Harness `>=0.2.2-rc.1 <0.2.3-0`**, a managed **Web or Desktop** profile and **Node.js 24.11+**. The range admits rc.3, later 0.2.2 release candidates and stable 0.2.2; it excludes 0.2.3, including its prereleases.
 
 **Web profile**
 
@@ -73,9 +73,15 @@ Adjust the six palette colors using the color picker or a HEX value, then save a
 
 ## Compatibility and actual verification
 
-The manifest admits only the two verified prereleases, `0.2.2-rc.1 || 0.2.2-rc.2`. Development SDK packages remain pinned to rc.1 for regression coverage. The plugin was checked on macOS; Windows/Linux and future Harness versions are not visually certified.
+The manifest uses the controlled compatibility range `>=0.2.2-rc.1 <0.2.3-0`, rather than an allowlist that blocks every new 0.2.2 release candidate. Development SDK packages remain pinned to rc.1 for regression coverage. The rc.3 compatibility review checks installed theme, locale, slot and shared Client contracts; no feature or stored palette migration is part of this metadata change. Admission of future 0.2.2 builds is a compatibility policy, not proof that their APIs or visuals cannot change. Windows/Linux and future Harness versions are not visually certified.
 
 The rc.2 compatibility pass inspected live Client registrations for `theme-studio` in `settings.general.item`, along with the installed API surface. Unit/contract tests exercise real palette/controller logic and compiled bundles with test doubles; they do not certify every browser interaction. The user-provided screenshots above illustrate the English interface; they are not automated browser captures or certification of the latest local translations. No mock preview or new live GUI test is claimed by this preparation. Real automated output is recorded below after the release checks; the optional detail image is omitted rather than fabricated.
+
+### Compatibility metadata checks (2026-11-13)
+
+The four TypeScript programs passed with managed Node.js 24.21.0. That managed executable could not load the existing third-party native Rolldown/Lightning CSS addons under macOS library validation: `npm test` stopped during the pretest build, and direct tests passed 37 cases while two native-dependent test files failed to load. No dependency, signature or runtime repair was attempted.
+
+Using the already installed, native-capable Node.js 24.16.0, `tsdown --config-loader native` rebuilt all four tracked artifacts without a content diff, and the full `node --test tests/*.test.ts` suite passed **47 tests, 0 failed**. This includes manifest/lockfile/documentation consistency coverage. No profile install or browser interaction was performed by these checks.
 
 ### Actual automated output (2026-11-12)
 

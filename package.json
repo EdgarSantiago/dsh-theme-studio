@@ -45,7 +45,7 @@
   },
   "engines": {
     "node": ">=24.11.0",
-    "dsh": "0.2.2-rc.1 || 0.2.2-rc.2"
+    "dsh": ">=0.2.2-rc.1 <0.2.3-0"
   },
   "scripts": {
     "build": "npm run typecheck && tsdown --config-loader native",

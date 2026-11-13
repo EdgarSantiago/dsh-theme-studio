@@ -27,7 +27,7 @@ test('public source distribution keeps identity, metadata, licenses and prebuilt
   assert.equal(manifest.version, '0.4.0')
   assert.equal(manifest.license, 'MIT')
   assert.equal(manifest.repository.url, 'https://github.com/EdgarSantiago/dsh-theme-studio.git')
-  assert.equal(manifest.engines.dsh, '0.2.2-rc.1 || 0.2.2-rc.2')
+  assert.equal(manifest.engines.dsh, '>=0.2.2-rc.1 <0.2.3-0')
   assert.ok(manifest.keywords.includes('dsh-plugin'))
   const client = await readFile(new URL(manifest.exports['./client'], root), 'utf8')
   assert.doesNotMatch(client, /(?:\/Users\/|\/home\/|[A-Z]:\\\\Users\\\\)/)
@@ -48,6 +48,20 @@ test('public source distribution keeps identity, metadata, licenses and prebuilt
 test('bundle patch inserts this package with the documented Cordis id', async () => {
   const patch = await readFile(new URL(manifest.dsh.bundle.patch, root), 'utf8')
   assert.equal(patch, '- insert:\n    - id: theme-studio\n      name: dsh-theme-studio\n')
+})
+
+test('controlled 0.2.2 admission stays consistent across release metadata', async () => {
+  const lock = JSON.parse(await readFile(new URL('package-lock.json', root), 'utf8'))
+  assert.deepEqual(lock.packages[''].engines, manifest.engines)
+  assert.deepEqual(lock.packages[''].peerDependencies, manifest.peerDependencies)
+  assert.deepEqual(lock.packages[''].devDependencies, manifest.devDependencies)
+  const readme = await readFile(new URL('README.md', root), 'utf8')
+  assert.ok(readme.includes(`\`${manifest.engines.dsh}\``))
+  assert.ok(readme.includes('excludes 0.2.3, including its prereleases'))
+  assert.ok(!readme.includes('0.2.2-rc.1 || 0.2.2-rc.2'))
+  for (const [name, version] of Object.entries(manifest.devDependencies)) {
+    if (name.startsWith('@deepseek-ai/dsh-')) assert.equal(version, '0.2.2-rc.1', name)
+  }
 })
 
 const screenshotNames = ['theme-studio-open-editor.png', 'theme-studio-general.png', 'theme-studio-colors.png']
